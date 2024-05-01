@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personality Test Result</title>
+    <style>
+        /* Add your styles here */
+        section {
+            text-align: center;
+            margin-top: 50px; /* Adjust as needed for spacing */
+        }
+
+        .dimension-bar {
+            display: inline-block;
+            width: 20px; /* Width of each bar */
+            margin: 0 5px; /* Adjust as needed for spacing between bars */
+            background-color: #3498db; /* Bar color */
+            height: 100px; /* Set a default height for the bars */
+        }
+
+        .dimension-bar2 {
+            display: inline-block;
+            width: 20px; /* Width of each bar */
+            margin: 0 5px; /* Adjust as needed for spacing between bars */
+            background-color: #f13818; /* Bar color */
+            height: 100px; /* Set a default height for the bars */
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <h1>Your Personality Type: <span id="result">Loading...</span></h1>
+        <h2>Result Details:</h2>
+        <div>
+            <p>Extraversion (E): <span id="extraversion">Calculating...</span>
+                <!-- Add the dimension bars for Extraversion -->
+                <span class="dimension-bar" id="extraversion-bar-up"></span>
+            </p>
+            <p>Introversion (I): <span id="introversion">Calculating...</span>
+                <!-- Add the dimension bars for Introversion -->
+                <span class="dimension-bar2" id="introversion-bar-up"></span>
+            </p>
+        </div>
+        <div>
+            <p>iNtuition (N): <span id="intuition">Calculating...</span>
+                <!-- Add the dimension bars for Intuition -->
+                <span class="dimension-bar" id="intuition-bar-up"></span>
+            </p>
+            <p>Sensing (S): <span id="sensing">Calculating...</span>
+                <!-- Add the dimension bars for Sensing -->
+                <span class="dimension-bar2" id="sensing-bar-up"></span>
+            </p>
+        </div>
+        <div>
+            <p>Thinking (T): <span id="thinking">Calculating...</span>
+                <!-- Add the dimension bars for Thinking -->
+                <span class="dimension-bar" id="thinking-bar-up"></span>
+            </p>
+            <p>Feeling (F): <span id="feeling">Calculating...</span>
+                <!-- Add the dimension bars for Feeling -->
+                <span class="dimension-bar2" id="feeling-bar-up"></span>
+            </p>
+        </div>
+        <div>
+            <p>Perceiving (P): <span id="perceiving">Calculating...</span>
+                <!-- Add the dimension bars for Perceiving -->
+                <span class="dimension-bar" id="perceiving-bar-up"></span>
+            </p>
+            <p>Judging (J): <span id="judging">Calculating...</span>
+                <!-- Add the dimension bars for Judging -->
+                <span class="dimension-bar2" id="judging-bar-up"></span>
+            </p>
+        </div>
+        <!-- Add similar divs and bars for other dimensions -->
+    </section>
+
+    <script>
+        // Use JavaScript to make an AJAX request to get the result
+        const resultContainer = document.getElementById("result");
+        const score = {{ SSScore | tojson }};
+        const maxScore = {{ SSMax_Score | tojson }};
+
+        fetch(`/get_result?score=${encodeURIComponent(JSON.stringify(score))}&maxScore=${encodeURIComponent(JSON.stringify(maxScore))}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").textContent = data.result;
+                const result_ratio = data.result_ratio;
+                
+                for(let i = 0; i < 8; i++) result_ratio[i] = Math.round(result_ratio[i]);
+
+                // Update dimension percentages
+                document.getElementById("extraversion").textContent = result_ratio[0] + "%";
+                document.getElementById("introversion").textContent = result_ratio[1] + "%";
+                document.getElementById("intuition").textContent = result_ratio[2] + "%";
+                document.getElementById("sensing").textContent = result_ratio[3] + "%";
+                document.getElementById("thinking").textContent = result_ratio[4] + "%";
+                document.getElementById("feeling").textContent = result_ratio[5] + "%";
+                document.getElementById("perceiving").textContent = result_ratio[6] + "%";
+                document.getElementById("judging").textContent = result_ratio[7] + "%";
+
+                // Update dimension bars
+                updateDimensionBars("extraversion", result_ratio[0]);
+                updateDimensionBars("introversion", result_ratio[1]);
+                updateDimensionBars("intuition", result_ratio[2]);
+                updateDimensionBars("sensing", result_ratio[3]);
+                updateDimensionBars("thinking", result_ratio[4]);
+                updateDimensionBars("feeling", result_ratio[5]);
+                updateDimensionBars("perceiving", result_ratio[6]);
+                updateDimensionBars("judging", result_ratio[7]);
+
+                // Add similar lines for other dimensions
+            })
+            .catch(error => {
+                console.error("Error fetching result:", error);
+                resultContainer.textContent = "Error fetching result";
+            });
+
+        function updateDimensionBars(dimension, percentage) {
+            const barUp = document.getElementById(`${dimension}-bar-up`);
+
+            // Calculate heights based on percentage
+            const upHeight = percentage + "px";
+
+            // Apply heights to bars
+            barUp.style.height = upHeight;
+        }
+    </script>
+</body>
+
+</html>

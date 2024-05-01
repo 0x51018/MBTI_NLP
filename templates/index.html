@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI 테스트</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #1a1a1a, #262626);
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ffffff;
+        }
+
+        button {
+            background: linear-gradient(to right, #4CAF50, #388e3c);
+            color: #ffffff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.8);
+            transition: box-shadow 0.3s ease-in-out, border-radius 0.3s ease-in-out;
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        button:hover {
+            box-shadow: 0 0 20px rgba(76, 175, 80, 1);
+        }
+
+        button:disabled {
+            background: linear-gradient(to right, #555, #444);
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>MBTI 테스트</h1>
+    <button id="startButton">시작</button>
+
+    <script>
+        const startButton = document.getElementById('startButton');
+
+        startButton.addEventListener('click', function () {
+            startButton.disabled = true;
+
+            // Automatically redirect to the questions page (questions.html)
+            window.location.href = '/questions';
+        });
+    </script>
+</body>
+</html>

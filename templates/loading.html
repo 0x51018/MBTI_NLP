@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Screen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #222222;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #loading-container {
+            text-align: center;
+            padding: 20px;
+            background-color: #222222;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #loading-spinner {
+            border: 4px solid #3498db;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="status">Loading...</div>
+    <script>
+        const evtSource = new EventSource("/get_progress");
+        evtSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.progress && data.total) {
+                document.getElementById("status").textContent = `Loading... ${data.progress}/${data.total}`;
+            }
+            if (data.status === "finished") {
+                evtSource.close(); // SSE 연결 종료
+                window.location.href = `/result_page?score=${btoa(data.score)}&maxScore=${btoa(data.maxScore)}`;
+            }
+        };
+    </script>
+</body>
+</html>

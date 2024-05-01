@@ -1,0 +1,155 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                display: flex;
+                background: #222222;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+            }
+
+            .rectangle {
+                width: 20%;
+                height: 50%;
+                display: flex;
+                background: #333333;
+                color: #fff;
+                flex-direction: column;
+            }
+
+            .row {
+                flex: 1;
+                display: flex;
+            }
+
+            .Bar {
+                flex: 1;
+                background-color: #333333;
+                position: relative;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .smallBar {
+                height: 90%;
+                width: 26%;
+                background-color: #112c13;
+                display: flex;
+                justify-content: center;
+                overflow: hidden;
+                border-radius: 20px;
+                box-shadow: 0 0 30px rgba(76, 175, 80, 0.5);
+            }
+
+            /* Align smallBar at the bottom for section A */
+            .row:first-child .smallBar {
+                margin-top: 20%;
+                align-items: flex-end;
+            }
+
+            /* Align smallBar at the top for section C */
+            .row:last-child .smallBar {
+                margin-bottom: 20%;
+                align-items: flex-start;
+            }
+
+            .filler {
+                width: 100%;
+                box-shadow: 0 0 30px rgba(76, 175, 80, 0.8);
+            }
+
+            .filler.bottom {
+                transform-origin: bottom;
+                background: linear-gradient(to bottom, #5acb5e, #1c4720);
+            }
+
+            .filler.top {
+                transform-origin: top;
+                background: linear-gradient(to top, #5acb5e, #1c4720);
+            }
+
+            .row:last-child .smallBar {
+                align-items: flex-start;
+            }
+
+            .alphabet {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                font-weight: bold;
+                margin: 2%;
+            }
+
+            /* 구역 B의 높이 조절 */
+            .row:nth-child(2) {
+                flex: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="rectangle">
+            <!-- 구역 A -->
+            <div class="row">
+                <div class="Bar">
+                    <div class="smallBar">
+                        <div class="filler bottom" style="height: 30%;"></div>
+                    </div>
+                </div>
+                <div class="Bar">
+                    <div class="smallBar">
+                        <div class="filler bottom" style="height: 50%;"></div>
+                    </div>
+                </div>
+                <div class="Bar">
+                    <div class="smallBar">
+                        <div class="filler bottom" style="height: 20%;"></div>
+                    </div>
+                </div>
+                <div class="Bar">
+                    <div class="smallBar">
+                        <div class="filler bottom" style="height: 40%;"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 구역 B -->
+            <div class="row">
+                <div class="alphabet">E</div>
+                <div class="alphabet">S</div>
+                <div class="alphabet">T</div>
+                <div class="alphabet">J</div>
+            </div>
+            <!-- 구역 C -->
+            <div class="row">
+                <div class="Bar">
+                    <div class="smallBar">
+                        <div class="filler top" style="height: 70%;"></div>
+                    </div>
+                </div>
+                <div class="Bar">
+                    <div class="smallBar">
+                        <div class="filler top" style="height: 50%;"></div>
+                    </div>
+                </div>
+                <div class="Bar">
+                    <div class="smallBar">
+                        <div class="filler top" style="height: 80%;"></div>
+                    </div>
+                </div>
+                <div class="Bar">
+                    <div class="smallBar">
+                        <div class="filler top" style="height: 60%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>

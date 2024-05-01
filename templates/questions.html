@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI 테스트</title>
+    <style>
+        body {
+            background: #222222;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h3 {
+            color: #ffffff;
+        }
+
+        #questionContainer {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column; /* 세로 방향으로 요소들을 정렬 */
+            justify-content: space-between;
+        }
+
+        #progressContainer {
+            display: flex;
+            justify-content: center; /* 가운데 정렬 */
+            align-items: center; /* 세로 중앙 정렬 */
+            margin-top: 10%; /* 화면 하단과 10%의 거리 */
+        }
+
+        #answerContainer {
+            display: flex;
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: space-between; /* 양 끝으로 정렬 */
+            vertical-align: top;
+            border: 1px solid #333333;
+            box-shadow: 0 0 10px rgba(51, 51, 51, 0.8);
+            border-radius: 15px;
+            padding: 10px;
+            transition: box-shadow 0.3s ease-in-out, border-radius 0.3s ease-in-out, border-color 0.3s ease-in-out;
+            width: 50%;
+            margin-top: 10%;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
+            width: 0; /* flex-grow가 작동하도록 0으로 설정 */
+            min-height: 24px;
+            padding: 10px;
+            font-size: 16px;
+            border: 0px solid #ffffff;
+            box-shadow: none;
+            resize: none;
+            transition: box-shadow 0.3s ease-in-out, border-radius 0.3s ease-in-out, border-color 0.3s ease-in-out, height 0.3s ease-in-out;
+            border-radius: 5px;
+            line-height: 24px;
+            background-color: #222222;
+            color: #ffffff;
+            overflow-y: hidden;
+            box-sizing: border-box;
+            margin-right: 10px; /* 버튼과의 간격을 조절 */
+        }
+
+        textarea.invalid {
+            border-color: #ff0000;
+            /* 상태3: 빨간색 테두리 */
+            box-shadow: 0 0 10px rgba(256, 0, 0, 0.8);
+            /* 상태3: 빨간색 그림자 */
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #48af4b;
+            /* 초록색 테두리 */
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.8);
+            /* 초록색 그림자 */
+        }
+
+        button {
+            padding: 7px;
+            font-size: 16px;
+            border: 1px solid #48af4b;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease-in-out, border-radius 0.3s ease-in-out;
+            border-radius: 5px;
+            line-height: 24px;
+            background: linear-gradient(to right, #48af4b, #388e3c);
+            color: #ffffff;
+            /* 버튼의 상단 여백 제거 */
+        }
+
+        button:hover {
+            box-shadow: 0 0 10px rgba(76, 175, 80, 1);
+        }
+
+        button:disabled {
+            background: linear-gradient(to right, #555, #444);
+            border: 1px solid #333333;
+        }
+
+        button:disabled:hover {
+            box-shadow: none;
+        }
+
+        /* 기본 스타일 */
+        #answerContainer {
+            width: 50%; /* PC에서는 50%의 너비를 유지 */
+            margin: 0 auto; /* 가운데 정렬 */
+        }
+
+        #myProgress {
+            width: 50%;
+            height: 30px;
+            background-color: #666666; /* 프로그레스 바의 배경 색상 */
+            border-radius: 15px; /* 프로그레스 바의 모서리 둥글게 처리 */
+            margin-top: 20px; /* 프로그레스 바와 상단 간격 조절 */
+            padding: 5px;
+            align-self: center;
+        }
+
+        #myProgress::-webkit-progress-bar {
+            background: linear-gradient(to right, #103b15, #134519);;
+            border-radius: 10px;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #myProgress::-webkit-progress-value {
+            background: linear-gradient(to bottom, #00ff48, #00ff04, #00ff48);;
+            box-shadow: 0 0 30px rgba(0, 255, 4, 0.5);
+        }
+
+        #myProgress div {
+            height: 100%; /* 프로그레스 바의 길이를 100%로 설정 */
+            background-color: rgba(76, 175, 80, 1); /* 프로그레스 바의 색상 */
+            border-radius: 10px; /* 프로그레스 바의 모서리 둥글게 처리 */
+            transition: width 0.3s ease-in-out; /* 프로그레스 바의 애니메이션 효과 */
+        }
+
+        /* 미디어 쿼리: 모바일 화면일 때 스타일 변경 */
+        @media only screen and (max-width: 600px) {
+            #answerContainer {
+                width: 100%; /* 모바일에서는 100%의 너비로 채움 */
+            }
+            #myProgress {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="questionContainer">
+        <progress value="0" max="16" id="myProgress"></progress>
+        <h3 id="questionText"></h3>
+        <div id="answerContainer">
+            <textarea id="answerInput" placeholder="자유롭게 작성하세요!" rows=1 required></textarea>
+            <button id="submitButton">Send</button>
+        </div>
+        <div class="'relative text-center text-xs text-token-text-secondary md:px-[20px]"></div>
+    </div>
+
+    <script>
+        const questionContainer = document.getElementById('questionContainer');
+        const questionTextElement = document.getElementById('questionText');
+        const answerInput = document.getElementById('answerInput');
+        const submitButton = document.getElementById('submitButton');
+        const progressElement = document.getElementById('progress');
+        const resultElement = document.getElementById('result');
+
+        const answers = [];
+        let currentQuestionIndex = 0;
+        let questions;
+        let i = 0;
+
+        function loadQuestions() {
+            fetch('/get_questions')
+                .then(response => response.json())
+                .then(data => {
+                    questions = data.questions;
+                    showQuestion();
+                });
+        }
+
+        function updateProgress(){
+            var progressBar = document.getElementById('myProgress');
+            progressBar.value = progressBar.value + 1;
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                questionTextElement.textContent = `질문 ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}`;
+                answerInput.value = '';
+                answerInput.classList.remove('invalid');
+                // 초기 상태: 내용이 없을 때의 테두리와 그림자 색상 변경
+                answerInput.style.borderColor = "#ffffff";
+                answerInput.style.boxShadow = "none";
+                updateProgress();
+                adjustTextareaHeight(); /* 초기 높이 설정 */
+            } else {
+                const data = {
+                    answers: answers
+                };
+                fetch('/send_answers', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(() => {
+                        window.location.href = '/loading';
+                    });
+            }
+        }
+
+        function adjustTextareaHeight() {
+            answerInput.style.height = "auto"; /* 높이를 auto로 설정하여 내용에 따라 자동 조절 */
+            answerInput.style.height = `${answerInput.scrollHeight}px`; /* 최소 높이 설정 */
+        }
+
+        submitButton.addEventListener('click', function () {
+            submitAnswer();
+        });
+
+        answerInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent the default Enter key behavior
+            submitAnswer();
+        }
+    });
+
+        answerInput.addEventListener('input', function () {
+            submitButton.disabled = !answerInput.value.trim();
+            answerInput.classList.remove('invalid');
+            // 내용이 입력되면 테두리와 그림자 색상 변경
+            answerInput.style.borderColor = answerInput.value.trim() === "" ? "#ffffff" : "#4CAF50";
+            answerInput.style.boxShadow = answerInput.value.trim() === "" ? "none" : "0 0 10px rgba(76, 175, 80, 0.8)";
+            adjustTextareaHeight();
+            submitButton.style.border = answerInput.value.trim() === "" ? "#333333" : "#4CAF50";
+        });
+
+        function submitAnswer() {
+            const answer = answerInput.value;
+            if (!answer.trim() || answer === '\n') {
+                answerInput.classList.add('invalid');
+                answerInput.value = '';
+                return;
+            }
+            else{
+                answers.push(answer);
+                currentQuestionIndex++;
+                showQuestion();
+            }
+        }
+        window.addEventListener('load', loadQuestions);
+    </script>
+</body>
+
+</html>
